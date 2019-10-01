@@ -1,25 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DayList from "components/DayList";
 import Appointment from "components/Appointment";
+import axios from "axios";
 
 import "components/Application.scss";
-const days = [
-  {
-    id: 1,
-    name: "Monday",
-    spots: 2
-  },
-  {
-    id: 2,
-    name: "Tuesday",
-    spots: 5
-  },
-  {
-    id: 3,
-    name: "Wednesday",
-    spots: 0
-  }
-];
 
 const appointments = [
   {
@@ -68,18 +52,29 @@ const appointments = [
   }
 ];
 
+const appointmentList = appointments.map(appointment => {
+  return (
+    <Appointment
+      key={appointment.id}
+      id={appointment.id}
+      time={appointment.time}
+      interview={appointment.interview}
+    />
+  );
+});
+
 export default function Application(props) {
   const [day, setDay] = useState("Monday");
-  const appointmentList = appointments.map(appointment => {
-    return (
-      <Appointment
-        key={appointment.id}
-        id={appointment.id}
-        time={appointment.time}
-        interview={appointment.interview}
-      />
-    );
-  });
+  const [days, setDays] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("/api/days")
+      .then(response => {
+        setDays(response.data);
+      })
+      .catch(err => console.log(err));
+  }, []);
 
   return (
     <main className="layout">
@@ -99,9 +94,9 @@ export default function Application(props) {
           alt="Lighthouse Labs"
         />
       </section>
-      <section className={"schedule"}>
+      <section className="schedule">
         {appointmentList}
-        <Appointment key={appointmentList.id} {...appointmentList} />
+        <Appointment key="last" time="5pm" />
       </section>
     </main>
   );
