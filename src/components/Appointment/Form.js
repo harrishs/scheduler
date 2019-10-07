@@ -16,6 +16,15 @@ export default function Form(props) {
   const save = () => {
     props.onSave(name, interviewer);
   };
+  function validate() {
+    if (name === "") {
+      setError("Student name cannot be blank");
+      return;
+    }
+
+    props.onSave(name, interviewer);
+  }
+  const [error, setError] = useState("");
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
@@ -27,11 +36,13 @@ export default function Form(props) {
             value={name}
             onChange={event => setName(event.target.value)}
             placeholder="Enter Student Name"
+            data-testid="student-name-input"
             /*
           This must be a controlled component
         */
           />
         </form>
+        <section className="appointment__validation">{error}</section>
         <InterviewerList
           interviewers={props.interviewers}
           value={interviewer}
@@ -43,7 +54,14 @@ export default function Form(props) {
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button confirm onClick={save}>
+          <Button
+            confirm
+            onClick={() => {
+              if (validate()) {
+                save;
+              }
+            }}
+          >
             Save
           </Button>
         </section>
