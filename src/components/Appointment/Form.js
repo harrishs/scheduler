@@ -14,7 +14,9 @@ export default function Form(props) {
     props.onCancel();
   };
   const save = () => {
-    props.onSave(name, interviewer);
+    if (validate()) {
+      props.onSave(name, interviewer);
+    }
   };
   function validate() {
     if (name === "") {
@@ -54,14 +56,7 @@ export default function Form(props) {
           <Button danger onClick={cancel}>
             Cancel
           </Button>
-          <Button
-            confirm
-            onClick={() => {
-              if (validate()) {
-                save;
-              }
-            }}
-          >
+          <Button confirm onClick={save}>
             Save
           </Button>
         </section>

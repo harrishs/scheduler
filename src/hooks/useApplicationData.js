@@ -100,7 +100,7 @@ export default function useApplicationData(props) {
     });
 
     dispatch({ type: SET_REMAININGSPOTS, days });
-    return axios.put(`/api/appointments/${id}`, { interview }).then(res => {
+    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
       dispatch({ type: SET_INTERVIEW, appointments });
     });
   }
