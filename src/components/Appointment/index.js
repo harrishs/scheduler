@@ -64,7 +64,7 @@ export default function Appointment(props) {
           message="Are you sure you would like to delete?"
           onConfirm={cancel}
           onCancel={() => {
-            transition(CREATE);
+            transition(SHOW);
           }}
         />
       )}
