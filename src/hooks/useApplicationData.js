@@ -135,8 +135,7 @@ export default function useApplicationData(props) {
 
     return axios
       .delete(`/api/appointments/${id}`, { data: null })
-      .then(() => dispatch({ type: SET_INTERVIEW, appointments }))
-      .catch(err => console.log(err));
+      .then(() => dispatch({ type: SET_INTERVIEW, appointments }));
   }
 
   return { state, setDay, bookInterview, cancelInterview };
