@@ -1,40 +1,13 @@
 import React, { useEffect, useReducer } from "react";
 import axios from "axios";
+import reducer, {
+  SET_DAY,
+  SET_APPLICATION_DATA,
+  SET_INTERVIEW,
+  SET_REMAININGSPOTS
+} from "../reducers/application";
 
 export default function useApplicationData(props) {
-  const SET_DAY = "SET_DAY";
-  const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
-  const SET_INTERVIEW = "SET_INTERVIEW";
-  const SET_REMAININGSPOTS = "SET_REMAININGSPOTS";
-
-  const reducer = (state, action) => {
-    switch (action.type) {
-      case SET_DAY:
-        return { ...state, day: action.day };
-
-      case SET_APPLICATION_DATA:
-        return {
-          ...state,
-          days: action.days,
-          appointments: action.appointments,
-          interviewers: action.interviewers
-        };
-
-      case SET_INTERVIEW: {
-        return { ...state, appointments: action.appointments };
-      }
-
-      case SET_REMAININGSPOTS: {
-        return { ...state, days: action.days };
-      }
-
-      default:
-        throw new Error(
-          `Tried to reduce with unsupported action type: ${action.type}`
-        );
-    }
-  };
-
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
@@ -74,7 +47,7 @@ export default function useApplicationData(props) {
   }, []);
 
   //Book interview function to setState
-  function bookInterview(id, interview) {
+  function bookInterview(id, interview, bool) {
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview }
@@ -99,7 +72,10 @@ export default function useApplicationData(props) {
       item: state.days[dayID].spots - 1
     });
 
-    dispatch({ type: SET_REMAININGSPOTS, days });
+    if (bool === true) {
+      dispatch({ type: SET_REMAININGSPOTS, days });
+    }
+
     return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
       dispatch({ type: SET_INTERVIEW, appointments });
     });
