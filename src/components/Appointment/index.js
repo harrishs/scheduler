@@ -30,13 +30,18 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    transition(SAVING);
-    props
-      .bookInterview(props.id, interview, true)
-      .then(() => transition(SHOW))
-      .catch(err => {
-        transition(ERROR_SAVE, true);
-      });
+    if (!interviewer){
+      transition(EDIT)
+    }
+    else {
+      transition(SAVING);
+      props
+        .bookInterview(props.id, interview, true)
+        .then(() => transition(SHOW))
+        .catch(err => {
+          transition(ERROR_SAVE, true);
+        });
+    }
   }
 
   //save function for edit
@@ -45,13 +50,18 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    transition(SAVING);
-    props
-      .bookInterview(props.id, interview, false)
-      .then(() => transition(SHOW))
-      .catch(err => {
-        transition(ERROR_SAVE, true);
-      });
+    if (!interviewer){
+      transition(EDIT)
+    }
+    else{
+      transition(SAVING);
+      props
+        .bookInterview(props.id, interview, false)
+        .then(() => transition(SHOW))
+        .catch(err => {
+          transition(ERROR_SAVE, true);
+        });
+    }
   }
 
   //cancel function part of delete
@@ -89,6 +99,9 @@ export default function Appointment(props) {
           name={() => {
             if (props.interview !== null) {
               return props.interview.student;
+            }
+            if (props.interview === null){
+              return "Please select an interviewer"
             }
           }}
           interviewer={() => {
