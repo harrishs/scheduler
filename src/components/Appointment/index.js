@@ -30,10 +30,6 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    if (!interviewer){
-      transition(EDIT)
-    }
-    else {
       transition(SAVING);
       props
         .bookInterview(props.id, interview, true)
@@ -41,7 +37,6 @@ export default function Appointment(props) {
         .catch(err => {
           transition(ERROR_SAVE, true);
         });
-    }
   }
 
   //save function for edit
@@ -50,10 +45,6 @@ export default function Appointment(props) {
       student: name,
       interviewer
     };
-    if (!interviewer){
-      transition(EDIT)
-    }
-    else{
       transition(SAVING);
       props
         .bookInterview(props.id, interview, false)
@@ -61,7 +52,6 @@ export default function Appointment(props) {
         .catch(err => {
           transition(ERROR_SAVE, true);
         });
-    }
   }
 
   //cancel function part of delete
@@ -99,9 +89,6 @@ export default function Appointment(props) {
           name={() => {
             if (props.interview !== null) {
               return props.interview.student;
-            }
-            if (props.interview === null){
-              return "Please select an interviewer"
             }
           }}
           interviewer={() => {
